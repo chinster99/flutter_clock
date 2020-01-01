@@ -4,6 +4,7 @@
 
 import 'dart:async';
 
+import 'package:analog_clock/background_circles.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
@@ -12,6 +13,7 @@ import 'package:vector_math/vector_math_64.dart' show radians;
 
 import 'container_hand.dart';
 import 'drawn_hand.dart';
+import 'background_circles.dart';
 
 /// Total distance traveled by a second or a minute hand, each second or minute,
 /// respectively.
@@ -95,26 +97,28 @@ class _AnalogClockState extends State<AnalogClock> {
     //  - Create your own [ThemeData], demonstrated in [AnalogClock].
     //  - Create a map of [Color]s to custom keys, demonstrated in
     //    [DigitalClock].
-    final customTheme = Theme.of(context).brightness == Brightness.light
+    final customTheme = Theme.of(context).brightness != Brightness.light
         ? Theme.of(context).copyWith(
             // Hour hand.
-            primaryColor: Color(0xFF4285F4),
+            primaryColor: Colors.deepPurple,
             // Minute hand.
-            highlightColor: Color(0xFF8AB4F8),
+            highlightColor: Colors.teal,
             // Second hand.
-            accentColor: Color(0xFF669DF6),
-            backgroundColor: Color(0xFFD2E3FC),
+            accentColor: Colors.blue,
+            backgroundColor: Colors.white70,
           )
         : Theme.of(context).copyWith(
-            primaryColor: Color(0xFFD2E3FC),
-            highlightColor: Color(0xFF4285F4),
-            accentColor: Color(0xFF8AB4F8),
-            backgroundColor: Color(0xFF3C4043),
+            primaryColor: Colors.purpleAccent,
+            highlightColor: Colors.tealAccent,
+            accentColor: Colors.lightBlueAccent,
+            backgroundColor: Colors.black,
           );
 
     final time = DateFormat.Hms().format(DateTime.now());
     final weatherInfo = DefaultTextStyle(
-      style: TextStyle(color: customTheme.primaryColor),
+      style: TextStyle(
+          color: Theme.of(context).brightness != Brightness.light ? Colors.black : Colors.white70
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -136,6 +140,7 @@ class _AnalogClockState extends State<AnalogClock> {
         child: Stack(
           children: [
             // Example of a hand drawn with [CustomPainter].
+            BackgroundCircles(),
             DrawnHand(
               color: customTheme.accentColor,
               thickness: 4,
