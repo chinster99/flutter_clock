@@ -17,23 +17,25 @@ class DrawnHand extends Hand {
   /// Create a const clock [Hand].
   ///
   /// All of the parameters are required and must not be null.
-  const DrawnHand({
-    @required Color color,
-    @required this.thickness,
-    @required double size,
+  DrawnHand({
+    @required List<Color> colors,
+    @required this.radius,
+    @required double distFromCenter,
     @required double angleRadians,
-  })  : assert(color != null),
-        assert(thickness != null),
-        assert(size != null),
+    this.showText,
+  })  : assert(colors != null),
+        assert(radius != null),
+        assert(distFromCenter != null),
         assert(angleRadians != null),
         super(
-          color: color,
-          size: size,
+          colors: colors,
+          distFromCenter: distFromCenter,
           angleRadians: angleRadians,
         );
 
   /// How thick the hand should be drawn, in logical pixels.
-  final double thickness;
+  final double radius;
+  String showText = "";
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +43,11 @@ class DrawnHand extends Hand {
       child: SizedBox.expand(
         child: CustomPaint(
           painter: _HandPainter(
-            handSize: size,
-            lineWidth: thickness,
+            distFromCenter: distFromCenter,
+            circleRadius: radius,
             angleRadians: angleRadians,
-            color: color,
+            colors: colors,
+            showText: showText,
           ),
         ),
       ),
@@ -55,42 +58,63 @@ class DrawnHand extends Hand {
 /// [CustomPainter] that draws a clock hand.
 class _HandPainter extends CustomPainter {
   _HandPainter({
-    @required this.handSize,
-    @required this.lineWidth,
+    @required this.distFromCenter,
+    @required this.circleRadius,
     @required this.angleRadians,
-    @required this.color,
-  })  : assert(handSize != null),
-        assert(lineWidth != null),
+    @required this.colors,
+    this.showText,
+  })  : assert(distFromCenter != null),
+        assert(circleRadius != null),
         assert(angleRadians != null),
-        assert(color != null),
-        assert(handSize >= 0.0),
-        assert(handSize <= 1.0);
+        assert(colors != null),
+        assert(distFromCenter >= 0.0);
 
-  double handSize;
-  double lineWidth;
+  double distFromCenter;
+  double circleRadius;
   double angleRadians;
-  Color color;
+  List<Color> colors;
+  String showText = "";
 
   @override
   void paint(Canvas canvas, Size size) {
-    final center = (Offset.zero & size).center;
     // We want to start at the top, not at the x-axis, so add pi/2.
     final angle = angleRadians - math.pi / 2.0;
-    final length = size.shortestSide * 0.5 * handSize;
-    final position = center + Offset(math.cos(angle), math.sin(angle)) * length;
-    final linePaint = Paint()
-      ..color = color
-      ..strokeWidth = lineWidth
-      ..strokeCap = StrokeCap.square;
-
-    canvas.drawLine(center, position, linePaint);
+    final center = (Offset.zero & size).center.translate(-80.0, 0.0);
+    final position = center + Offset(math.cos(angle), math.sin(angle)) * distFromCenter;
+    final Shader radialGradient = RadialGradient(
+      colors: colors,
+    ).createShader(Rect.fromCenter(center: center, width: 200.0, height: 200.0));
+    final circlePaint = Paint()
+      ..shader = radialGradient
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(position, circleRadius, circlePaint);
+    if (showText != "") {
+      final textStyle = TextStyle(
+        color: Colors.black,
+        fontSize: 20,
+        fontFamily: 'Nunito'
+      );
+      final textSpan = TextSpan(
+        text: showText,
+        style: textStyle,
+      );
+      final textPainter = TextPainter(
+        text: textSpan,
+        textDirection: TextDirection.ltr,
+      );
+      textPainter.layout(
+        minWidth: 0,
+        maxWidth: size.width,
+      );
+      textPainter.paint(canvas, position.translate(-12, -12));
+    }
   }
 
   @override
   bool shouldRepaint(_HandPainter oldDelegate) {
-    return oldDelegate.handSize != handSize ||
-        oldDelegate.lineWidth != lineWidth ||
+    return oldDelegate.distFromCenter != distFromCenter ||
+        oldDelegate.circleRadius != circleRadius ||
         oldDelegate.angleRadians != angleRadians ||
-        oldDelegate.color != color;
+        oldDelegate.colors != colors;
   }
 }

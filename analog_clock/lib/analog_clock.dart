@@ -11,7 +11,6 @@ import 'package:flutter/semantics.dart';
 import 'package:intl/intl.dart';
 import 'package:vector_math/vector_math_64.dart' show radians;
 
-import 'container_hand.dart';
 import 'drawn_hand.dart';
 import 'background_circles.dart';
 
@@ -82,7 +81,7 @@ class _AnalogClockState extends State<AnalogClock> {
       // Update once per second. Make sure to do it at the beginning of each
       // new second, so that the clock is accurate.
       _timer = Timer(
-        Duration(seconds: 1) - Duration(milliseconds: _now.millisecond),
+        Duration(milliseconds: 1) - Duration(microseconds: _now.microsecond),
         _updateTime,
       );
     });
@@ -105,7 +104,7 @@ class _AnalogClockState extends State<AnalogClock> {
             highlightColor: Colors.teal,
             // Second hand.
             accentColor: Colors.blue,
-            backgroundColor: Colors.white70,
+            backgroundColor: Colors.white,
           )
         : Theme.of(context).copyWith(
             primaryColor: Colors.purpleAccent,
@@ -117,7 +116,7 @@ class _AnalogClockState extends State<AnalogClock> {
     final time = DateFormat.Hms().format(DateTime.now());
     final weatherInfo = DefaultTextStyle(
       style: TextStyle(
-          color: Theme.of(context).brightness != Brightness.light ? Colors.black : Colors.white70
+          color: Theme.of(context).brightness != Brightness.light ? Colors.black : Colors.white
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,6 +129,22 @@ class _AnalogClockState extends State<AnalogClock> {
       ),
     );
 
+    final sunColors = [
+      Colors.orange, Colors.orangeAccent,
+    ];
+
+    final moonColors = [
+      Colors.blueGrey, Colors.grey,
+    ];
+
+    final planetColorsDay = [
+      Colors.teal, Colors.blue, Colors.deepPurple, Colors.red,
+    ];
+
+    final planetColorsNight = [
+      Colors.tealAccent, Colors.lightBlueAccent, Colors.purpleAccent, Colors.redAccent,
+    ];
+
     return Semantics.fromProperties(
       properties: SemanticsProperties(
         label: 'Analog clock with time $time',
@@ -140,39 +155,35 @@ class _AnalogClockState extends State<AnalogClock> {
         child: Stack(
           children: [
             // Example of a hand drawn with [CustomPainter].
-            BackgroundCircles(),
-            DrawnHand(
-              color: customTheme.accentColor,
-              thickness: 4,
-              size: 1,
-              angleRadians: _now.second * radiansPerTick,
+            BackgroundCircles(
+              orbitsColor: Theme.of(context).brightness != Brightness.light ? Colors.black : Colors.white70,
+              centerColors: Theme.of(context).brightness != Brightness.light ? sunColors : moonColors,
             ),
             DrawnHand(
-              color: customTheme.highlightColor,
-              thickness: 16,
-              size: 0.9,
-              angleRadians: _now.minute * radiansPerTick,
+              colors: Theme.of(context).brightness != Brightness.light ? planetColorsDay : planetColorsNight,
+              radius: 4,
+              distFromCenter: 105,
+              angleRadians: _now.second * radiansPerTick +
+                  (_now.millisecond / 1000) * radiansPerTick,
             ),
-            // Example of a hand drawn with [Container].
-            ContainerHand(
-              color: Colors.transparent,
-              size: 0.5,
+            DrawnHand(
+              colors: Theme.of(context).brightness != Brightness.light ? planetColorsDay : planetColorsNight,
+              radius: 16,
+              distFromCenter: 80,
+              angleRadians: _now.minute * radiansPerTick +
+                  (_now.second / 60) * radiansPerTick,
+              showText: _now.minute.toString(),
+            ),
+            DrawnHand(
+              colors: Theme.of(context).brightness != Brightness.light ? planetColorsDay : planetColorsNight,
+              radius: 16,
+              distFromCenter: 35,
               angleRadians: _now.hour * radiansPerHour +
                   (_now.minute / 60) * radiansPerHour,
-              child: Transform.translate(
-                offset: Offset(0.0, -60.0),
-                child: Container(
-                  width: 32,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    color: customTheme.primaryColor,
-                  ),
-                ),
-              ),
+              showText: _now.hour.toString(),
             ),
             Positioned(
-              left: 0,
-              bottom: 0,
+              right: 0,
               child: Padding(
                 padding: const EdgeInsets.all(8),
                 child: weatherInfo,
