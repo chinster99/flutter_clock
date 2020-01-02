@@ -22,7 +22,7 @@ class CirclesDraw extends CustomPainter {
       ..style = PaintingStyle.fill;
     canvas.drawCircle(
         center,
-        10,
+        5,
         paint
     );
     paint = Paint()
@@ -35,12 +35,12 @@ class CirclesDraw extends CustomPainter {
     );
     canvas.drawCircle(
         center,
-        80,
+        75,
         paint
     );
     canvas.drawCircle(
         center,
-        35,
+        30,
         paint
     );
   }

@@ -91,7 +91,7 @@ class _HandPainter extends CustomPainter {
     if (showText != "") {
       final textStyle = TextStyle(
         color: Colors.black,
-        fontSize: 20,
+        fontSize: 26,
         fontFamily: 'Nunito'
       );
       final textSpan = TextSpan(
@@ -106,7 +106,7 @@ class _HandPainter extends CustomPainter {
         minWidth: 0,
         maxWidth: size.width,
       );
-      textPainter.paint(canvas, position.translate(-12, -12));
+      textPainter.paint(canvas, position.translate(-17, -17));
     }
   }
 

@@ -36,7 +36,8 @@ class AnalogClock extends StatefulWidget {
 class _AnalogClockState extends State<AnalogClock> {
   var _now = DateTime.now();
   var _temperature = '';
-  var _temperatureRange = '';
+  var _temperatureLow = '';
+  var _temperatureHigh = '';
   var _condition = '';
   var _location = '';
   Timer _timer;
@@ -69,7 +70,8 @@ class _AnalogClockState extends State<AnalogClock> {
   void _updateModel() {
     setState(() {
       _temperature = widget.model.temperatureString;
-      _temperatureRange = '(${widget.model.low} - ${widget.model.highString})';
+      _temperatureLow = '${widget.model.low}';
+      _temperatureHigh = '${widget.model.highString}';
       _condition = widget.model.weatherString;
       _location = widget.model.location;
     });
@@ -116,15 +118,19 @@ class _AnalogClockState extends State<AnalogClock> {
     final time = DateFormat.Hms().format(DateTime.now());
     final weatherInfo = DefaultTextStyle(
       style: TextStyle(
-          color: Theme.of(context).brightness != Brightness.light ? Colors.black : Colors.white
+        fontFamily: 'Nunito',
+        fontSize: 12,
+        color: Theme.of(context).brightness != Brightness.light ? Colors.black : Colors.white
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(_temperature),
-          Text(_temperatureRange),
+          Text(_now.month.toString() + "/" + _now.day.toString() + "/" + _now.year.toString()),
+          Text(_location + ", Earth"),
           Text(_condition),
-          Text(_location),
+          Text(_temperature),
+          Text('Low: ' + _temperatureLow + ', High: ' + _temperatureHigh),
         ],
       ),
     );
@@ -168,24 +174,24 @@ class _AnalogClockState extends State<AnalogClock> {
             ),
             DrawnHand(
               colors: Theme.of(context).brightness != Brightness.light ? planetColorsDay : planetColorsNight,
-              radius: 16,
-              distFromCenter: 80,
+              radius: 20,
+              distFromCenter: 75,
               angleRadians: _now.minute * radiansPerTick +
                   (_now.second / 60) * radiansPerTick,
-              showText: _now.minute.toString(),
+              showText: _now.minute.toString().padLeft(2, '0'),
             ),
             DrawnHand(
               colors: Theme.of(context).brightness != Brightness.light ? planetColorsDay : planetColorsNight,
-              radius: 16,
-              distFromCenter: 35,
+              radius: 20,
+              distFromCenter: 30,
               angleRadians: _now.hour * radiansPerHour +
                   (_now.minute / 60) * radiansPerHour,
-              showText: _now.hour.toString(),
+              showText: DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_now).padLeft(2, '0'),
             ),
             Positioned(
-              right: 0,
+              right: 0.0,
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(24),
                 child: weatherInfo,
               ),
             ),
