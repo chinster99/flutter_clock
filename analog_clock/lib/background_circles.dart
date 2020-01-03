@@ -1,71 +1,83 @@
+/*
+*  orbits for clock
+*  created by achintya kattemalavadi
+*  january 3, 2019
+*/
+
+// imports
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/cupertino.dart';
-
+// drawing class header
 class CirclesDraw extends CustomPainter {
+
+  // constants
+  final double orbitsOffset = -80.0;
+  final double orbitWidth = 1.2;
+  final double hourRadius = 96.0;
+  final double minuteRadius = 64.0;
+  final double secondRadius = 20.0;
+
+  // color for orbits
   final Color orbitsColor;
-  final List<Color> centerColors;
+
+  // constructor
   CirclesDraw({
     @required this.orbitsColor,
-    @required this.centerColors,
-  }) : assert(orbitsColor != null),
-    assert(centerColors != null);
+  }) : assert(orbitsColor != null);
+
+  // paint method
   @override
   void paint(Canvas canvas, Size size) {
-    final center = (Offset.zero & size).center.translate(-80.0, 0.0);
-    final Shader linearGradient = LinearGradient(
-      colors: centerColors,
-    ).createShader(Rect.fromCenter(center: center, width: 10.0, height: 10.0));
+    // offset slightly off center
+    final center = (Offset.zero & size).center.translate(orbitsOffset, 0.0);
+    // painter
     var paint = Paint()
-      ..shader = linearGradient
-      ..style = PaintingStyle.fill;
-    /*canvas.drawCircle(
-        center,
-        5,
-        paint
-    );*/
-    paint = Paint()
       ..color = this.orbitsColor
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 0.8;
+      ..strokeWidth = orbitWidth;
+    // draw the orbits
     canvas.drawCircle(
         center,
-        96,
+        hourRadius,
         paint
     );
     canvas.drawCircle(
         center,
-        64,
+        minuteRadius,
         paint
     );
     canvas.drawCircle(
         center,
-        20,
+        secondRadius,
         paint
     );
   }
+  // repaint method
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return false;
   }
 }
 
+// class header
 class BackgroundCircles extends StatelessWidget {
+
+  // color for orbits
   final Color orbitsColor;
-  final List<Color> centerColors;
+
+  // constructor
   BackgroundCircles({
     @required this.orbitsColor,
-    @required this.centerColors,
-  }) : assert(orbitsColor != null),
-    assert(centerColors != null);
+  }) : assert(orbitsColor != null);
+
+  // build method
   @override
   Widget build(BuildContext context) {
     return Center(
       child: CustomPaint(
         painter: CirclesDraw(
           orbitsColor: this.orbitsColor,
-          centerColors: this.centerColors,
         ),
       ),
     );

@@ -81,8 +81,8 @@ class _AnalogClockState extends State<AnalogClock> {
   void _updateTime() {
     setState(() {
       _now = DateTime.now();
-      // Update once per second. Make sure to do it at the beginning of each
-      // new second, so that the clock is accurate.
+      // Update once per millisecond. Make sure to do it at the beginning of each
+      // new millisecond, so that the clock is accurate.
       _timer = Timer(
         Duration(milliseconds: 1) - Duration(microseconds: _now.microsecond),
         _updateTime,
@@ -161,14 +161,6 @@ class _AnalogClockState extends State<AnalogClock> {
       ),
     );
 
-    final sunColors = [
-      Colors.orange, Colors.orangeAccent,
-    ];
-
-    final moonColors = [
-      Colors.blueGrey, Colors.grey,
-    ];
-
     final planetColorsDay = [
       Colors.teal, Colors.blue, Colors.deepPurple, Colors.red,
     ];
@@ -178,8 +170,10 @@ class _AnalogClockState extends State<AnalogClock> {
     ];
 
     /*
-    TODO: clean code
-     maybe reformat clock so hour is in center, minute orbits hour, second orbits minute?
+    TODO: clean and comment code
+     rewrite stuff that isn't yours
+     add licenses
+     rename project based on submission guidelines
      add am/pm stuff
     */
 
@@ -195,7 +189,6 @@ class _AnalogClockState extends State<AnalogClock> {
             // Example of a hand drawn with [CustomPainter].
             BackgroundCircles(
               orbitsColor: Theme.of(context).brightness == Brightness.light ? Colors.deepPurple : Colors.amber,
-              centerColors: Theme.of(context).brightness == Brightness.light ? sunColors : moonColors,
             ),
             DrawnHand(
               colors: Theme.of(context).brightness == Brightness.light ? planetColorsDay : planetColorsNight,
