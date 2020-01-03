@@ -119,8 +119,9 @@ class _AnalogClockState extends State<AnalogClock> {
     final time = DateFormat.Hms().format(DateTime.now());
     final locationInfo = DefaultTextStyle(
       style: TextStyle(
-          fontFamily: 'nunito',
-          fontSize: 11,
+          fontFamily: 'monospace',
+          fontSize: 12,
+          fontWeight: FontWeight.w900,
           color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white
       ),
       child: Column(
@@ -129,17 +130,13 @@ class _AnalogClockState extends State<AnalogClock> {
         children: [
           Text(
             DateFormat.yMMMMEEEEd().format(_now),
-            style: TextStyle (
-              fontSize: 14,
-              fontWeight: FontWeight.w900,
-            ),
           ),
         ],
       ),
     );
     final weatherInfo = DefaultTextStyle(
       style: TextStyle(
-        fontFamily: 'nunito',
+        fontFamily: 'monospace',
         fontSize: 11,
         color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white
       ),
@@ -175,6 +172,7 @@ class _AnalogClockState extends State<AnalogClock> {
      add licenses
      rename project based on submission guidelines
      add am/pm stuff
+     add containers to wrap text if too large/make more accessible
     */
 
     return Semantics.fromProperties(
