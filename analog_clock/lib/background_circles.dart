@@ -27,10 +27,11 @@ class CirclesDraw extends CustomPainter {
     );
     paint = Paint()
       ..color = this.orbitsColor
-      ..style = PaintingStyle.stroke;
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 0.8;
     canvas.drawCircle(
         center,
-        105,
+        108,
         paint
     );
     canvas.drawCircle(

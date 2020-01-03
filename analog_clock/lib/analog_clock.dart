@@ -5,6 +5,7 @@
 import 'dart:async';
 
 import 'package:analog_clock/background_circles.dart';
+import 'package:analog_clock/weather_icon.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
@@ -98,7 +99,7 @@ class _AnalogClockState extends State<AnalogClock> {
     //  - Create your own [ThemeData], demonstrated in [AnalogClock].
     //  - Create a map of [Color]s to custom keys, demonstrated in
     //    [DigitalClock].
-    final customTheme = Theme.of(context).brightness != Brightness.light
+    final customTheme = Theme.of(context).brightness == Brightness.light
         ? Theme.of(context).copyWith(
             // Hour hand.
             primaryColor: Colors.deepPurple,
@@ -116,20 +117,39 @@ class _AnalogClockState extends State<AnalogClock> {
           );
 
     final time = DateFormat.Hms().format(DateTime.now());
+    final locationInfo = DefaultTextStyle(
+      style: TextStyle(
+          fontFamily: 'Nunito',
+          fontSize: 12,
+          color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(DateFormat.yMMMMEEEEd().format(_now)),
+          Text(_location + ", Earth"),
+        ],
+      ),
+    );
     final weatherInfo = DefaultTextStyle(
       style: TextStyle(
         fontFamily: 'Nunito',
         fontSize: 12,
-        color: Theme.of(context).brightness != Brightness.light ? Colors.black : Colors.white
+        color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(_now.month.toString() + "/" + _now.day.toString() + "/" + _now.year.toString()),
-          Text(_location + ", Earth"),
-          Text(_condition),
-          Text(_temperature),
+          WeatherIcon(condition: _condition),
+          Text(
+            _temperature,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
           Text('Low: ' + _temperatureLow + ', High: ' + _temperatureHigh),
         ],
       ),
@@ -148,7 +168,7 @@ class _AnalogClockState extends State<AnalogClock> {
     ];
 
     final planetColorsNight = [
-      Colors.tealAccent, Colors.lightBlueAccent, Colors.purpleAccent, Colors.redAccent,
+      Colors.redAccent, Colors.purpleAccent, Colors.lightBlueAccent, Colors.tealAccent,
     ];
 
     return Semantics.fromProperties(
@@ -162,36 +182,47 @@ class _AnalogClockState extends State<AnalogClock> {
           children: [
             // Example of a hand drawn with [CustomPainter].
             BackgroundCircles(
-              orbitsColor: Theme.of(context).brightness != Brightness.light ? Colors.black : Colors.white70,
-              centerColors: Theme.of(context).brightness != Brightness.light ? sunColors : moonColors,
+              orbitsColor: Theme.of(context).brightness == Brightness.light ? Colors.deepPurple : Colors.amber,
+              centerColors: Theme.of(context).brightness == Brightness.light ? sunColors : moonColors,
             ),
             DrawnHand(
-              colors: Theme.of(context).brightness != Brightness.light ? planetColorsDay : planetColorsNight,
-              radius: 4,
-              distFromCenter: 105,
+              colors: Theme.of(context).brightness == Brightness.light ? planetColorsDay : planetColorsNight,
+              radius: 8,
+              distFromCenter: 108,
               angleRadians: _now.second * radiansPerTick +
                   (_now.millisecond / 1000) * radiansPerTick,
             ),
             DrawnHand(
-              colors: Theme.of(context).brightness != Brightness.light ? planetColorsDay : planetColorsNight,
+              colors: Theme.of(context).brightness == Brightness.light ? planetColorsDay : planetColorsNight,
               radius: 20,
               distFromCenter: 75,
               angleRadians: _now.minute * radiansPerTick +
                   (_now.second / 60) * radiansPerTick,
               showText: _now.minute.toString().padLeft(2, '0'),
+              textColor: customTheme.backgroundColor,
             ),
             DrawnHand(
-              colors: Theme.of(context).brightness != Brightness.light ? planetColorsDay : planetColorsNight,
+              colors: Theme.of(context).brightness == Brightness.light ? planetColorsDay : planetColorsNight,
               radius: 20,
               distFromCenter: 30,
               angleRadians: _now.hour * radiansPerHour +
                   (_now.minute / 60) * radiansPerHour,
               showText: DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_now).padLeft(2, '0'),
+              textColor: customTheme.backgroundColor,
             ),
             Positioned(
               right: 0.0,
+              top: 0.0,
               child: Padding(
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.all(22),
+                child: locationInfo,
+              ),
+            ),
+            Positioned(
+              right: 0.0,
+              bottom: 0.0,
+              child: Padding(
+                padding: const EdgeInsets.all(22),
                 child: weatherInfo,
               ),
             ),

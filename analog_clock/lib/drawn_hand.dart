@@ -23,6 +23,7 @@ class DrawnHand extends Hand {
     @required double distFromCenter,
     @required double angleRadians,
     this.showText,
+    this.textColor,
   })  : assert(colors != null),
         assert(radius != null),
         assert(distFromCenter != null),
@@ -36,6 +37,7 @@ class DrawnHand extends Hand {
   /// How thick the hand should be drawn, in logical pixels.
   final double radius;
   String showText = "";
+  Color textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +50,7 @@ class DrawnHand extends Hand {
             angleRadians: angleRadians,
             colors: colors,
             showText: showText,
+            textColor: textColor,
           ),
         ),
       ),
@@ -63,6 +66,7 @@ class _HandPainter extends CustomPainter {
     @required this.angleRadians,
     @required this.colors,
     this.showText,
+    this.textColor,
   })  : assert(distFromCenter != null),
         assert(circleRadius != null),
         assert(angleRadians != null),
@@ -73,6 +77,7 @@ class _HandPainter extends CustomPainter {
   double circleRadius;
   double angleRadians;
   List<Color> colors;
+  Color textColor;
   String showText = "";
 
   @override
@@ -90,7 +95,7 @@ class _HandPainter extends CustomPainter {
     canvas.drawCircle(position, circleRadius, circlePaint);
     if (showText != "") {
       final textStyle = TextStyle(
-        color: Colors.black,
+        color: this.textColor,
         fontSize: 26,
         fontFamily: 'Nunito'
       );
