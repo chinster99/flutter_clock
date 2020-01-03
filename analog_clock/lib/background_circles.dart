@@ -20,28 +20,28 @@ class CirclesDraw extends CustomPainter {
     var paint = Paint()
       ..shader = linearGradient
       ..style = PaintingStyle.fill;
-    canvas.drawCircle(
+    /*canvas.drawCircle(
         center,
         5,
         paint
-    );
+    );*/
     paint = Paint()
       ..color = this.orbitsColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = 0.8;
     canvas.drawCircle(
         center,
-        108,
+        96,
         paint
     );
     canvas.drawCircle(
         center,
-        75,
+        64,
         paint
     );
     canvas.drawCircle(
         center,
-        30,
+        20,
         paint
     );
   }

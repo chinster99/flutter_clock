@@ -127,8 +127,13 @@ class _AnalogClockState extends State<AnalogClock> {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(DateFormat.yMMMMEEEEd().format(_now)),
-          Text(_location + ", Earth"),
+          Text(
+            DateFormat.yMMMMEEEEd().format(_now),
+            style: TextStyle (
+              fontSize: 14,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
         ],
       ),
     );
@@ -151,6 +156,7 @@ class _AnalogClockState extends State<AnalogClock> {
             ),
           ),
           Text('Low: ' + _temperatureLow + ', High: ' + _temperatureHigh),
+          Text(_location + ", Earth"),
         ],
       ),
     );
@@ -194,14 +200,14 @@ class _AnalogClockState extends State<AnalogClock> {
             DrawnHand(
               colors: Theme.of(context).brightness == Brightness.light ? planetColorsDay : planetColorsNight,
               radius: 8,
-              distFromCenter: 108,
+              distFromCenter: 96,
               angleRadians: _now.second * radiansPerTick +
                   (_now.millisecond / 1000) * radiansPerTick,
             ),
             DrawnHand(
               colors: Theme.of(context).brightness == Brightness.light ? planetColorsDay : planetColorsNight,
               radius: 20,
-              distFromCenter: 75,
+              distFromCenter: 64,
               angleRadians: _now.minute * radiansPerTick +
                   (_now.second / 60) * radiansPerTick,
               showText: _now.minute.toString().padLeft(2, '0'),
@@ -210,7 +216,7 @@ class _AnalogClockState extends State<AnalogClock> {
             DrawnHand(
               colors: Theme.of(context).brightness == Brightness.light ? planetColorsDay : planetColorsNight,
               radius: 20,
-              distFromCenter: 30,
+              distFromCenter: 20,
               angleRadians: _now.hour * radiansPerHour +
                   (_now.minute / 60) * radiansPerHour,
               showText: DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_now).padLeft(2, '0'),
