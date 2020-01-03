@@ -119,8 +119,8 @@ class _AnalogClockState extends State<AnalogClock> {
     final time = DateFormat.Hms().format(DateTime.now());
     final locationInfo = DefaultTextStyle(
       style: TextStyle(
-          fontFamily: 'Nunito',
-          fontSize: 12,
+          fontFamily: 'nunito',
+          fontSize: 11,
           color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white
       ),
       child: Column(
@@ -134,8 +134,8 @@ class _AnalogClockState extends State<AnalogClock> {
     );
     final weatherInfo = DefaultTextStyle(
       style: TextStyle(
-        fontFamily: 'Nunito',
-        fontSize: 12,
+        fontFamily: 'nunito',
+        fontSize: 11,
         color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white
       ),
       child: Column(
@@ -170,6 +170,12 @@ class _AnalogClockState extends State<AnalogClock> {
     final planetColorsNight = [
       Colors.redAccent, Colors.purpleAccent, Colors.lightBlueAccent, Colors.tealAccent,
     ];
+
+    /*
+    TODO: clean code
+     maybe reformat clock so hour is in center, minute orbits hour, second orbits minute?
+     add am/pm stuff
+    */
 
     return Semantics.fromProperties(
       properties: SemanticsProperties(
