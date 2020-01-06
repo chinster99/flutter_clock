@@ -2,7 +2,7 @@
 *  main for clock
 *  adapted from sample analog_clock main
 *  created by achintya kattemalavadi
-*  january 3, 2019
+*  january 2019
 */
 
 // includes
