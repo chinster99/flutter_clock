@@ -1,6 +1,8 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+/*
+*  main clock class
+*  created by achintya kattemalavadi
+*  january 3, 2019
+*/
 
 import 'dart:async';
 
@@ -25,16 +27,16 @@ final radiansPerHour = radians(360 / 12);
 /// A basic analog clock.
 ///
 /// You can do better than this!
-class AnalogClock extends StatefulWidget {
-  const AnalogClock(this.model);
+class AchintyaClock extends StatefulWidget {
+  const AchintyaClock(this.model);
 
   final ClockModel model;
 
   @override
-  _AnalogClockState createState() => _AnalogClockState();
+  _AchintyaClockState createState() => _AchintyaClockState();
 }
 
-class _AnalogClockState extends State<AnalogClock> {
+class _AchintyaClockState extends State<AchintyaClock> {
   var _now = DateTime.now();
   var _temperature = '';
   var _temperatureLow = '';
@@ -53,7 +55,7 @@ class _AnalogClockState extends State<AnalogClock> {
   }
 
   @override
-  void didUpdateWidget(AnalogClock oldWidget) {
+  void didUpdateWidget(AchintyaClock oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.model != oldWidget.model) {
       oldWidget.model.removeListener(_updateModel);
