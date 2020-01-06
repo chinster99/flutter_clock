@@ -39,17 +39,17 @@ class CirclesDraw extends CustomPainter {
     // draw the orbits
     canvas.drawCircle(
         center,
-        hourRadius,
-        paint
-    );
-    canvas.drawCircle(
-        center,
         minuteRadius,
         paint
     );
     canvas.drawCircle(
         center,
         secondRadius,
+        paint
+    );
+    canvas.drawCircle(
+        center,
+        hourRadius,
         paint
     );
   }
