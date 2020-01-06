@@ -6,8 +6,8 @@
 
 import 'dart:async';
 
-import 'package:analog_clock/background_circles.dart';
-import 'package:analog_clock/weather_icon.dart';
+import 'package:achintya_clock/background_circles.dart';
+import 'package:achintya_clock/weather_icon.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
