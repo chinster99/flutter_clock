@@ -1,9 +1,11 @@
 /*
 *  main clock class
+*  adapted from analog_clock
 *  created by achintya kattemalavadi
 *  january 2019
 */
 
+// imports
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'dart:async';
@@ -16,9 +18,7 @@ import 'package:achintya_clock/background_circles.dart';
 import 'package:achintya_clock/weather_icon.dart';
 import 'package:achintya_clock/satellite.dart';
 
-final radiansPerTick = radians(360 / 60);
-final radiansPerHour = radians(360 / 12);
-
+// statefulwidget for achintyaclock
 class AchintyaClock extends StatefulWidget {
   const AchintyaClock(
     this._clockModel
@@ -28,8 +28,14 @@ class AchintyaClock extends StatefulWidget {
   _AchintyaClockState createState() => _AchintyaClockState();
 }
 
+// state for achintyaclock
 class _AchintyaClockState extends State<AchintyaClock> {
 
+  // constants
+  final radiansPerTick = radians(360 / 60);
+  final radiansPerHour = radians(360 / 12);
+
+  // class vars
   DateTime _now = DateTime.now();
   String _temperature = '';
   String _temperatureLow = '';
@@ -38,6 +44,7 @@ class _AchintyaClockState extends State<AchintyaClock> {
   String _location = '';
   Timer _timer;
 
+  // initstate method
   @override
   void initState() {
     super.initState();
@@ -46,6 +53,7 @@ class _AchintyaClockState extends State<AchintyaClock> {
     _updateModel();
   }
 
+  // change listener on clockmodel update
   @override
   void didUpdateWidget(AchintyaClock oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -55,6 +63,7 @@ class _AchintyaClockState extends State<AchintyaClock> {
     }
   }
 
+  // dispose method
   @override
   void dispose() {
     _timer?.cancel();
@@ -62,6 +71,7 @@ class _AchintyaClockState extends State<AchintyaClock> {
     super.dispose();
   }
 
+  // update weather and location info
   void _updateModel() {
     setState(() {
       _temperature = widget._clockModel.temperatureString;
@@ -72,11 +82,10 @@ class _AchintyaClockState extends State<AchintyaClock> {
     });
   }
 
+  // update time info once per millisecond
   void _updateTime() {
     setState(() {
       _now = DateTime.now();
-      // Update once per millisecond. Make sure to do it at the beginning of each
-      // new millisecond, so that the clock is accurate.
       _timer = Timer(
         Duration(milliseconds: 1) - Duration(microseconds: _now.microsecond),
         _updateTime,
@@ -84,49 +93,45 @@ class _AchintyaClockState extends State<AchintyaClock> {
     });
   }
 
+  // build method
   @override
   Widget build(BuildContext context) {
-    final customTheme = Theme.of(context).brightness == Brightness.light
-        ? Theme.of(context).copyWith(
-            // Hour hand.
-            primaryColor: Colors.deepPurple,
-            // Minute hand.
-            highlightColor: Colors.teal,
-            // Second hand.
-            accentColor: Colors.blue,
-            backgroundColor: Colors.white,
-          )
-        : Theme.of(context).copyWith(
-            primaryColor: Colors.purpleAccent,
-            highlightColor: Colors.tealAccent,
-            accentColor: Colors.lightBlueAccent,
-            backgroundColor: Colors.black,
-          );
 
+    // theme for clock based on light or dark mode
+    final customTheme = Theme.of(context).brightness == Brightness.light
+      ? Theme.of(context).copyWith(
+          accentColor: Colors.deepPurple,
+          backgroundColor: Colors.white,
+        )
+      : Theme.of(context).copyWith(
+          accentColor: Colors.amber,
+          backgroundColor: Colors.black,
+        );
+
+    // time for label
     final time = DateFormat.Hms().format(DateTime.now());
-    final locationInfo = DefaultTextStyle(
-      style: TextStyle(
-          fontFamily: 'monospace',
-          fontSize: 12,
+
+    // text style for info panels
+    final sideInfoTextStyle = TextStyle(
+      fontFamily: 'nunito',
+      color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
+    );
+
+    // dateinfo widget
+    final dateInfo = DefaultTextStyle(
+      style: sideInfoTextStyle,
+      child: Text(
+        DateFormat.yMMMMEEEEd().format(_now),
+        style: TextStyle(
+          fontSize: 14,
           fontWeight: FontWeight.w900,
-          color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            DateFormat.yMMMMEEEEd().format(_now),
-          ),
-        ],
+        ),
       ),
     );
+
+    // weatherinfo widget
     final weatherInfo = DefaultTextStyle(
-      style: TextStyle(
-        fontFamily: 'monospace',
-        fontSize: 11,
-        color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white
-      ),
+      style: sideInfoTextStyle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -135,42 +140,45 @@ class _AchintyaClockState extends State<AchintyaClock> {
           Text(
             _temperature,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 28,
               fontWeight: FontWeight.w900,
             ),
           ),
-          Text('Low: ' + _temperatureLow + ', High: ' + _temperatureHigh),
-          Text(_location + ", Earth"),
+          Text(
+            'Low: ' + _temperatureLow + ', High: ' + _temperatureHigh,
+            style: TextStyle(
+              fontSize: 12,
+            ),
+          ),
+          Text(
+            _location + ", Earth",
+            style: TextStyle(
+              fontSize: 12,
+            ),
+          ),
         ],
       ),
     );
 
+    // color list for the satellites for light theme
     final planetColorsDay = [
       Colors.teal, Colors.blue, Colors.deepPurple, Colors.red,
     ];
 
+    // color list for the satellites for dark theme
     final planetColorsNight = [
       Colors.redAccent, Colors.purpleAccent, Colors.lightBlueAccent, Colors.tealAccent,
     ];
 
+    // text style and offset for the minute and hour satellites
     final TextStyle satelliteTextStyle = TextStyle(
       color: customTheme.backgroundColor,
       fontSize: 26,
-      fontFamily: 'monospace',
+      fontFamily: 'nunito',
       fontWeight: FontWeight.w900,
     );
-
     final Offset textOffset = Offset(-15, -15);
-
-    /*
-    TODO: clean and comment code
-     rewrite stuff that isn't yours
-     add licenses
-     rename project based on submission guidelines
-     add am/pm stuff
-     add containers to wrap text if too large/make more accessible
-    */
-
+    
     return Semantics.fromProperties(
       properties: SemanticsProperties(
         label: "Achintya's clock with time $time",
@@ -178,12 +186,16 @@ class _AchintyaClockState extends State<AchintyaClock> {
       ),
       child: Container(
         color: customTheme.backgroundColor,
+        // stack to hold everything on the clock
         child: Stack(
           children: [
-            // Example of a hand drawn with [CustomPainter].
+
+            // orbits
             BackgroundCircles(
-              orbitsColor: Theme.of(context).brightness == Brightness.light ? Colors.deepPurple : Colors.amber,
+              orbitsColor: customTheme.accentColor,
             ),
+
+            // second satellite
             Satellite(
               colors: Theme.of(context).brightness == Brightness.light ? planetColorsDay : planetColorsNight,
               radius: 8,
@@ -191,6 +203,8 @@ class _AchintyaClockState extends State<AchintyaClock> {
               angleRadians: _now.second * radiansPerTick +
                   (_now.millisecond / 1000) * radiansPerTick,
             ),
+
+            // minute satellite
             Satellite(
               colors: Theme.of(context).brightness == Brightness.light ? planetColorsDay : planetColorsNight,
               radius: 20,
@@ -201,6 +215,8 @@ class _AchintyaClockState extends State<AchintyaClock> {
               textStyle: satelliteTextStyle,
               textOffset: textOffset,
             ),
+
+            // hour satellite
             Satellite(
               colors: Theme.of(context).brightness == Brightness.light ? planetColorsDay : planetColorsNight,
               radius: 20,
@@ -211,14 +227,18 @@ class _AchintyaClockState extends State<AchintyaClock> {
               textStyle: satelliteTextStyle,
               textOffset: textOffset,
             ),
+
+            // date
             Positioned(
               right: 0.0,
               top: 0.0,
               child: Padding(
                 padding: const EdgeInsets.all(22),
-                child: locationInfo,
+                child: dateInfo,
               ),
             ),
+
+            // weather
             Positioned(
               right: 0.0,
               bottom: 0.0,
