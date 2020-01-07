@@ -11,7 +11,6 @@ import 'package:achintya_clock/constants.dart';
 
 // drawing class header
 class CirclesDraw extends CustomPainter {
-
   // constants
   final double orbitWidth = 1.2;
   final double hourRadius = 96.0;
@@ -37,22 +36,11 @@ class CirclesDraw extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = orbitWidth;
     // draw the orbits
-    canvas.drawCircle(
-        center,
-        minuteRadius,
-        paint
-    );
-    canvas.drawCircle(
-        center,
-        secondRadius,
-        paint
-    );
-    canvas.drawCircle(
-        center,
-        hourRadius,
-        paint
-    );
+    canvas.drawCircle(center, minuteRadius, paint);
+    canvas.drawCircle(center, secondRadius, paint);
+    canvas.drawCircle(center, hourRadius, paint);
   }
+
   // repaint method
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
@@ -62,7 +50,6 @@ class CirclesDraw extends CustomPainter {
 
 // class header
 class BackgroundCircles extends StatelessWidget {
-
   // color for orbits
   final Color orbitsColor;
 

@@ -17,7 +17,6 @@ import 'achintya_clock.dart';
 
 // main method
 void main() {
-
   // target platform override for macos
   if (!kIsWeb && Platform.isMacOS)
     debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;

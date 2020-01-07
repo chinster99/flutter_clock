@@ -12,7 +12,6 @@ import 'dart:math' as math;
 
 // painter for satellites
 class _SatellitePainter extends CustomPainter {
-
   // class variables
   final double distFromCenter;
   final double circleRadius;
@@ -40,7 +39,6 @@ class _SatellitePainter extends CustomPainter {
   // paint method
   @override
   void paint(Canvas canvas, Size size) {
-
     // angle offset to start on positive y-axis
     final angle = angleRadians - math.pi / 2.0;
 
@@ -48,12 +46,14 @@ class _SatellitePainter extends CustomPainter {
     final center = (Offset.zero & size).center.translate(orbitsdx, 0.0);
 
     // center of drawn satellite
-    final position = center + Offset(math.cos(angle), math.sin(angle)) * distFromCenter;
+    final position =
+        center + Offset(math.cos(angle), math.sin(angle)) * distFromCenter;
 
     // creating the gradient shader for the painter
     final Shader radialGradient = RadialGradient(
       colors: colors,
-    ).createShader(Rect.fromCenter(center: center, width: 400.0, height: 200.0));
+    ).createShader(
+        Rect.fromCenter(center: center, width: 400.0, height: 200.0));
 
     // paint for the satellite
     final circlePaint = Paint()
@@ -78,7 +78,10 @@ class _SatellitePainter extends CustomPainter {
         maxWidth: size.width,
       );
       // center the text over the satellite
-      textPainter.paint(canvas, position.translate(textOffset.dx, textOffset.dy)); // TODO: pass in offset
+      textPainter.paint(
+          canvas,
+          position.translate(
+              textOffset.dx, textOffset.dy)); // TODO: pass in offset
     }
   }
 
@@ -96,7 +99,6 @@ class _SatellitePainter extends CustomPainter {
 
 // class declaration
 class Satellite extends StatelessWidget {
-
   // class variables
   final List<Color> colors;
   final double distFromCenter;

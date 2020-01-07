@@ -10,7 +10,6 @@ import 'package:flutter_clock_helper/model.dart';
 
 // class header
 class WeatherIcon extends StatelessWidget {
-
   // icon dimension
   final double iconDim = 48.0;
 
@@ -29,9 +28,7 @@ class WeatherIcon extends StatelessWidget {
   final WeatherCondition condition;
 
   // constructor
-  WeatherIcon({
-    @required this.condition
-  }) : assert(condition != null);
+  WeatherIcon({@required this.condition}) : assert(condition != null);
 
   // build method
   @override
