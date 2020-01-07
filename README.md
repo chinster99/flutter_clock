@@ -1,15 +1,3 @@
-# Flutter Clock
+# Clock face for Flutter Clock challenge
 
-Welcome to Flutter Clock!
-
-See [flutter.dev/clock](https://flutter.dev/clock) for how to get started, submission requirements, contest rules, and FAQs.
-
-See a [live demo](https://maryx.github.io/flutter_clock) with Flutter for Web!
-
-Example [Analog Clock](analog_clock)
-
-<img src='analog_clock/analog.gif' width='350'>
-
-Example [Digital Clock](digital_clock)
-
-<img src='digital_clock/digital.gif' width='350'>
+My clock face for the flutter clock challenge. A hybrid analog/digital clock face using orbiting satellites instead of hands. There is weather, date, and location info on the side.
