@@ -1,15 +1,16 @@
 /*
 *  main clock class
 *  created by achintya kattemalavadi
-*  january 3, 2019
+*  january 2019
 */
 
-import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
-import 'package:intl/intl.dart';
-import 'package:vector_math/vector_math_64.dart' show radians;
 import 'dart:async';
+import 'package:vector_math/vector_math_64.dart' show radians;
+import 'package:intl/intl.dart';
+
+import 'package:flutter_clock_helper/model.dart';
 
 import 'package:achintya_clock/background_circles.dart';
 import 'package:achintya_clock/weather_icon.dart';
@@ -19,13 +20,16 @@ final radiansPerTick = radians(360 / 60);
 final radiansPerHour = radians(360 / 12);
 
 class AchintyaClock extends StatefulWidget {
-  const AchintyaClock(this._clockModel);
+  const AchintyaClock(
+    this._clockModel
+  );
   final ClockModel _clockModel;
   @override
   _AchintyaClockState createState() => _AchintyaClockState();
 }
 
 class _AchintyaClockState extends State<AchintyaClock> {
+
   DateTime _now = DateTime.now();
   String _temperature = '';
   String _temperatureLow = '';
@@ -38,7 +42,6 @@ class _AchintyaClockState extends State<AchintyaClock> {
   void initState() {
     super.initState();
     widget._clockModel.addListener(_updateModel);
-    // Set the initial values.
     _updateTime();
     _updateModel();
   }
@@ -157,6 +160,8 @@ class _AchintyaClockState extends State<AchintyaClock> {
       fontWeight: FontWeight.w900,
     );
 
+    final Offset textOffset = Offset(-15, -15);
+
     /*
     TODO: clean and comment code
      rewrite stuff that isn't yours
@@ -194,6 +199,7 @@ class _AchintyaClockState extends State<AchintyaClock> {
                   (_now.second / 60) * radiansPerTick,
               showText: _now.minute.toString().padLeft(2, '0'),
               textStyle: satelliteTextStyle,
+              textOffset: textOffset,
             ),
             Satellite(
               colors: Theme.of(context).brightness == Brightness.light ? planetColorsDay : planetColorsNight,
@@ -203,6 +209,7 @@ class _AchintyaClockState extends State<AchintyaClock> {
                   (_now.minute / 60) * radiansPerHour,
               showText: DateFormat(widget._clockModel.is24HourFormat ? 'HH' : 'hh').format(_now).padLeft(2, '0'),
               textStyle: satelliteTextStyle,
+              textOffset: textOffset,
             ),
             Positioned(
               right: 0.0,

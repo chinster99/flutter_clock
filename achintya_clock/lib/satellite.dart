@@ -6,6 +6,7 @@
 */
 
 // imports
+import 'package:achintya_clock/constants.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -19,6 +20,7 @@ class _SatellitePainter extends CustomPainter {
   final List<Color> colors;
   String showText = "";
   TextStyle textStyle = TextStyle();
+  Offset textOffset = Offset(0, 0);
 
   // constructor
   _SatellitePainter({
@@ -28,6 +30,7 @@ class _SatellitePainter extends CustomPainter {
     @required this.colors,
     this.showText,
     this.textStyle,
+    this.textOffset,
   })  : assert(distFromCenter != null),
         assert(circleRadius != null),
         assert(angleRadians != null),
@@ -42,7 +45,7 @@ class _SatellitePainter extends CustomPainter {
     final angle = angleRadians - math.pi / 2.0;
 
     // center, offset to left by 80
-    final center = (Offset.zero & size).center.translate(-80.0, 0.0);
+    final center = (Offset.zero & size).center.translate(orbitsdx, 0.0);
 
     // center of drawn satellite
     final position = center + Offset(math.cos(angle), math.sin(angle)) * distFromCenter;
@@ -50,7 +53,7 @@ class _SatellitePainter extends CustomPainter {
     // creating the gradient shader for the painter
     final Shader radialGradient = RadialGradient(
       colors: colors,
-    ).createShader(Rect.fromCenter(center: center, width: 200.0, height: 200.0)); // TODO: width height are consts
+    ).createShader(Rect.fromCenter(center: center, width: 400.0, height: 200.0));
 
     // paint for the satellite
     final circlePaint = Paint()
@@ -61,7 +64,7 @@ class _SatellitePainter extends CustomPainter {
     canvas.drawCircle(position, circleRadius, circlePaint);
 
     // if text needs to be drawn, draw it
-    if (showText != null && showText != "") {
+    if (showText != null && showText != "" && textOffset != null) {
       final textSpan = TextSpan(
         text: showText,
         style: textStyle,
@@ -75,7 +78,7 @@ class _SatellitePainter extends CustomPainter {
         maxWidth: size.width,
       );
       // center the text over the satellite
-      textPainter.paint(canvas, position.translate(-15, -15)); // TODO: pass in offset
+      textPainter.paint(canvas, position.translate(textOffset.dx, textOffset.dy)); // TODO: pass in offset
     }
   }
 
@@ -86,7 +89,8 @@ class _SatellitePainter extends CustomPainter {
         oldDelegate.angleRadians != angleRadians ||
         oldDelegate.colors != colors ||
         oldDelegate.showText != showText ||
-        oldDelegate.textStyle != textStyle;
+        oldDelegate.textStyle != textStyle ||
+        oldDelegate.textOffset != textOffset;
   }
 }
 
@@ -100,6 +104,7 @@ class Satellite extends StatelessWidget {
   final double radius;
   final String showText;
   final TextStyle textStyle;
+  final Offset textOffset;
 
   // constructor
   Satellite({
@@ -109,12 +114,14 @@ class Satellite extends StatelessWidget {
     @required this.angleRadians,
     String showText,
     TextStyle textStyle,
+    Offset textOffset,
   })  : assert(colors != null),
         assert(radius != null),
         assert(distFromCenter != null),
         assert(angleRadians != null),
         this.showText = showText,
-        this.textStyle = textStyle;
+        this.textStyle = textStyle,
+        this.textOffset = textOffset;
 
   // build method
   @override
@@ -130,6 +137,7 @@ class Satellite extends StatelessWidget {
             colors: colors,
             showText: showText,
             textStyle: textStyle,
+            textOffset: textOffset,
           ),
         ),
       ),

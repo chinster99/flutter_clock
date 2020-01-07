@@ -7,12 +7,12 @@
 // imports
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:achintya_clock/constants.dart';
 
 // drawing class header
 class CirclesDraw extends CustomPainter {
 
   // constants
-  final double orbitsOffset = -80.0;
   final double orbitWidth = 1.2;
   final double hourRadius = 96.0;
   final double minuteRadius = 64.0;
@@ -30,7 +30,7 @@ class CirclesDraw extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // offset slightly off center
-    final center = (Offset.zero & size).center.translate(orbitsOffset, 0.0);
+    final center = (Offset.zero & size).center.translate(orbitsdx, 0.0);
     // painter
     var paint = Paint()
       ..color = this.orbitsColor
